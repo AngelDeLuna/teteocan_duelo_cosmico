@@ -4,6 +4,7 @@ import 'package:flame/flame.dart';
 // ignore: unused_import
 import 'package:flutter/material.dart';
 import 'package:teteocan_duelo_cosmico/components/marco.dart';
+import 'package:teteocan_duelo_cosmico/components/oponent.dart';
 
 import 'package:teteocan_duelo_cosmico/components/pile.dart';
 import 'package:teteocan_duelo_cosmico/components/stock.dart';
@@ -40,7 +41,8 @@ class TeteocanGame extends FlameGame {
 
     final stock = Stock()
       ..size = cardSize
-      ..position = Vector2(cardGap, cardGap);
+      //..position = Vector2(cardGap, cardGap);
+      ..position = Vector2(cardGap, 3*cardHeight + 4*cardGap);
 
     final stockSprite = SpriteComponent(
       sprite: teteocan(1367, 6, 357, 501),
@@ -60,20 +62,30 @@ class TeteocanGame extends FlameGame {
     camera.viewfinder.position = Vector2((3*cardWidth + 4*cardGap)/2,0);
     camera.viewfinder.anchor = Anchor.topCenter;
 
+    // Agregar carta oponente
+    final cartaOponente = Oponent()
+      ..size = cardSize
+      ..position = Vector2(camera.viewfinder.position.x,  (2 * cardHeight + 3 * cardGap)/2);
+
+    world.add(cartaOponente);
+
   }
 
   void togglePiles() {
     if (!pilesMostradas) {
       // Crear y mostrar piles
       piles = List.generate(
-        8,
+        6,
         (i) => Pile(
             teteocan(matriz[i][0], matriz[i][1], matriz[i][2], matriz[i][3])
           )
             ..size = cardSize / 4
+            // ..position = Vector2(
+            //   cardGap + cardWidth / 2 - cardWidth / 8,
+            //   cardHeight + cardGap * 2 + i * (cardHeight / 4 + cardGap),
             ..position = Vector2(
-              cardGap + cardWidth / 2 - cardWidth / 8,
-              cardHeight + cardGap * 2 + i * (cardHeight / 4 + cardGap),
+              2* cardGap + cardWidth + i * (cardWidth / 4 + cardGap),
+              3*cardHeight + 4*cardGap + cardHeight / 2 - cardHeight / 8,
               ),
       );
       world.addAll(piles);
@@ -95,7 +107,7 @@ class TeteocanGame extends FlameGame {
         cartaCentral = Card_Center(sprite)
       ..size = cardSize
       //..position = camera.viewport.virtualSize / 2 - cardSize/2;
-      ..position = Vector2(camera.viewfinder.position.x,  (3 * cardHeight + 4 * cardGap)/2);
+      ..position = Vector2(camera.viewfinder.position.x,  (4 * cardHeight + 5 * cardGap)/2);
     
     world.add(cartaCentral!);
     }else{
